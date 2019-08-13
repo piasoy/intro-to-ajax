@@ -27,8 +27,24 @@
   //
 
   $('#loadBtn2').click(clickBtn)
+  const dogContainer = document.querySelector('#doggoContainer');
 
+  const dogBtn = document.querySelector('#generateDoggoBtn');
+  dogBtn.addEventListener('click', function(){
+    $.getJSON("https://dog.ceo/api/breeds/image/random", function(result){
+      console.dir(result)
+      dogBtn.innerHTML = "Generating Doggo …";
+      dogBtn.disabled = true;
+
+      // const dogContainer = document.querySelector('#doggoContainer');
+      dogContainer.innerHTML = `<img src="${result.message}"/>`
+      dogBtn.innerHTML = "Generate Doggo";
+      dogBtn.disabled = false;
+    })
+   
+  });
   function clickBtn () {
+    
     $('#jumbotronContainer2').load('jumbotron.html')
     $('#loadBtn2').remove()
   }
@@ -71,6 +87,39 @@
   //
 
   // TODO: your code goes here :)
+
+
+  let menuDiv = document.querySelector("#selectBreedContainer");  //grabs div
+  let menu = document.createElement("select");                    //creates select element
+  menuDiv.appendChild(menu);                                        //appends select element to div
+  
+
+  $.ajax({                                                          //fetches list
+    url: "https://dog.ceo/api/breeds/list",
+    type: 'GET',
+    success: getBreedList                                           //calls getBreedList
+  })
+
+  function getBreedList (results){                                  
+      results.message.map(function(result) {                        //maps through array items
+      let option = document.createElement("option");                //create option element
+      let attribute = document.createAttribute("value");            //create attribute
+      attribute.value = result;                                     // assign value to attribute
+      option.setAttributeNode(attribute);                           //give place attribute in option element
+      option.innerHTML = result;                                    //places result in option
+      menu.appendChild(option)                                      //add option element to mene
+      
+     })
+  }
+    $(menu).on('change', function(){
+      let index = menu.selectedIndex;
+      let breedName = (menu[index].innerHTML)
+      console.log(breedName)
+
+      $.getJSON(`https://dog.ceo/api/breed/${breedName}/images/random`, function(results){       
+        dogContainer.innerHTML = `<img src="${results.message}"/>`
+      })
+  })
 
   //
   // Cool. Now let's kick it up a notch and allow selecting a specific breed of dog!
