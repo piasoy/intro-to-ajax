@@ -93,6 +93,36 @@
 
   // TODO: your code goes here :)
 
+  const catButton = document.querySelector("#generateCatBtn");
+  const catContainer = document.querySelector("#catContainer");
+
+  catButton.addEventListener('click', getCat);
+
+  function getCat(){
+    $(catButton).attr("disabled", true);
+    console.log('disabled? ',catButton.outerHTML)
+    fetch('https://api.thecatapi.com/v1/images/search',{
+      headers: {
+        'x-api-key': '4090a025-8521-4dd8-84ce-a730fc64ef40'
+      }
+      
+    })
+    .then(getJSON)
+    .then(showCat)
+  }
+
+  function getJSON(response){
+    console.log('The AJAX request finished. I am the callback from the first Promise object.')
+    
+     return response.json() // <-- returns a new Promise object  
+  }
+
+  function showCat(responseJSON){
+    $(catButton).attr("disabled", false);
+    console.log('enabled? ',catButton.outerHTML)
+    catContainer.innerHTML = `<img src="${responseJSON[0].url}"/>`
+    }
+
   //
   // What else can you build with your new AJAX knowledge?
   //
@@ -108,6 +138,7 @@
   //
 
   // TODO: your code goes here :)
+
 
   //
   // Be sure to check out the axios project for another example of a Promise-based

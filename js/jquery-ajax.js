@@ -105,18 +105,19 @@
       let option = document.createElement("option");                //create option element
       let attribute = document.createAttribute("value");            //create attribute
       attribute.value = result;                                     // assign value to attribute
-      option.setAttributeNode(attribute);                           //give place attribute in option element
+      option.setAttributeNode(attribute);                           //place attribute in option element
       option.innerHTML = result;                                    //places result in option
       menu.appendChild(option)                                      //add option element to mene
       
      })
   }
-    $(menu).on('change', function(){
-      let index = menu.selectedIndex;
-      let breedName = (menu[index].innerHTML)
+
+    $(menu).on('change', function(){                                //get select element, when it changes, execute function
+      let index = menu.selectedIndex;                               //index is the index of menu array
+      let breedName = (menu[index].innerHTML)                       //breedName is the innherHTML of menu array at specific index
       console.log(breedName)
 
-      $.getJSON(`https://dog.ceo/api/breed/${breedName}/images/random`, function(results){       
+      $.getJSON(`https://dog.ceo/api/breed/${breedName}/images/random`, function(results){    //get data which is object with key value meesage   
         dogContainer.innerHTML = `<img src="${results.message}"/>`
       })
   })
